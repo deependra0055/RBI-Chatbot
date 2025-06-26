@@ -5,3 +5,4 @@ langchain-community
 chromadb
 sentence-transformers
 transformers
+protobuf==3.20.1
