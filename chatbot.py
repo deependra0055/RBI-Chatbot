@@ -8,7 +8,6 @@ from langchain.chains import RetrievalQA
 from transformers import pipeline
 import os
 
-@st.cache_resource(show_spinner=False)
 def load_documents(pdf_folder="docs"):
     financial_loader = PyPDFLoader(f"{pdf_folder}/financial_risk.pdf")
     operational_loader = PyPDFLoader(f"{pdf_folder}/operations_risk.pdf")
@@ -16,7 +15,6 @@ def load_documents(pdf_folder="docs"):
     operational_docs = operational_loader.load()
     return financial_docs + operational_docs
 
-@st.cache_resource(show_spinner=False)
 def split_documents(documents):
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
     return splitter.split_documents(documents)
