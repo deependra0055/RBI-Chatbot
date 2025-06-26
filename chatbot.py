@@ -19,14 +19,12 @@ def split_documents(documents):
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
     return splitter.split_documents(documents)
 
-@st.cache_resource(show_spinner=True)
 def create_vector_store(split_docs):
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vectordb = Chroma.from_documents(split_docs, embedding=embeddings, persist_directory="chroma_db")
     vectordb.persist()
     return vectordb
 
-@st.cache_resource(show_spinner=True)
 def load_llm():
     hf_pipeline = pipeline(
         "text2text-generation",
@@ -38,7 +36,6 @@ def load_llm():
     )
     return HuggingFacePipeline(pipeline=hf_pipeline)
 
-@st.cache_resource(show_spinner=False)
 def build_qa_chain(vectordb, llm):
     retriever = vectordb.as_retriever(search_kwargs={"k": 3})
     qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever, chain_type="stuff")
